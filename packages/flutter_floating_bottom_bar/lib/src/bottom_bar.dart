@@ -145,8 +145,7 @@ class BottomBar extends StatefulWidget {
     this.width = 300,
     this.borderRadius = BorderRadius.zero,
     this.showIcon = true,
-    @Deprecated(
-        'Use barAlignment instead, this will be removed in a future release')
+    @Deprecated('Use barAlignment instead, this will be removed in a future release')
     this.alignment = Alignment.bottomCenter,
     this.barAlignment = Alignment.bottomCenter,
     this.onBottomBarShown,
@@ -163,20 +162,22 @@ class BottomBar extends StatefulWidget {
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar>
-    with SingleTickerProviderStateMixin {
-  ScrollController bodyScrollController = ScrollController();
+class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMixin {
+  late ScrollController bodyScrollController;
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late bool isScrollingDown;
   late bool isOnTop;
+  VoidCallback? _scrollListener;
 
   @override
   void initState() {
+    super.initState();
+    bodyScrollController = ScrollController();
     isScrollingDown = widget.reverse;
     isOnTop = !widget.reverse;
-    myScroll();
-    super.initState();
+    _setupScrollListener();
+
     _controller = AnimationController(
       duration: widget.duration,
       vsync: this,
@@ -214,19 +215,19 @@ class _BottomBarState extends State<BottomBar>
     if (widget.onBottomBarHidden != null) widget.onBottomBarHidden!();
   }
 
-  Future<void> myScroll() async {
-    bodyScrollController.addListener(() {
+  void _setupScrollListener() {
+    _scrollListener = () {
+      if (!bodyScrollController.hasClients) return;
+
       if (!widget.reverse) {
-        if (bodyScrollController.position.userScrollDirection ==
-            ScrollDirection.reverse) {
+        if (bodyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
           if (!isScrollingDown) {
             isScrollingDown = true;
             isOnTop = false;
             hideBottomBar();
           }
         }
-        if (bodyScrollController.position.userScrollDirection ==
-            ScrollDirection.forward) {
+        if (bodyScrollController.position.userScrollDirection == ScrollDirection.forward) {
           if (isScrollingDown) {
             isScrollingDown = false;
             isOnTop = true;
@@ -234,16 +235,14 @@ class _BottomBarState extends State<BottomBar>
           }
         }
       } else {
-        if (bodyScrollController.position.userScrollDirection ==
-            ScrollDirection.forward) {
+        if (bodyScrollController.position.userScrollDirection == ScrollDirection.forward) {
           if (!isScrollingDown) {
             isScrollingDown = true;
             isOnTop = false;
             hideBottomBar();
           }
         }
-        if (bodyScrollController.position.userScrollDirection ==
-            ScrollDirection.reverse) {
+        if (bodyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
           if (isScrollingDown) {
             isScrollingDown = false;
             isOnTop = true;
@@ -251,12 +250,17 @@ class _BottomBarState extends State<BottomBar>
           }
         }
       }
-    });
+    };
+    if (_scrollListener != null) {
+      bodyScrollController.addListener(_scrollListener!);
+    }
   }
 
   @override
   void dispose() {
-    bodyScrollController.removeListener(() {});
+    if (_scrollListener != null) {
+      bodyScrollController.removeListener(_scrollListener!);
+    }
     bodyScrollController.dispose();
     _controller.dispose();
     super.dispose();
@@ -304,10 +308,8 @@ class _BottomBarState extends State<BottomBar>
                               bodyScrollController
                                   .animateTo(
                                 (!widget.scrollOpposite)
-                                    ? bodyScrollController
-                                        .position.minScrollExtent
-                                    : bodyScrollController
-                                        .position.maxScrollExtent,
+                                    ? bodyScrollController.position.minScrollExtent
+                                    : bodyScrollController.position.maxScrollExtent,
                                 duration: widget.duration,
                                 curve: widget.curve,
                               )
@@ -324,8 +326,7 @@ class _BottomBarState extends State<BottomBar>
                           },
                           child: () {
                             if (widget.icon != null) {
-                              return widget.icon!(
-                                  isOnTop == true ? 0 : widget.iconWidth / 2,
+                              return widget.icon!(isOnTop == true ? 0 : widget.iconWidth / 2,
                                   isOnTop == true ? 0 : widget.iconHeight / 2);
                             } else {
                               return Center(
@@ -335,9 +336,7 @@ class _BottomBarState extends State<BottomBar>
                                   icon: Icon(
                                     Icons.arrow_upward_rounded,
                                     color: Colors.white,
-                                    size: isOnTop == true
-                                        ? 0
-                                        : widget.iconWidth / 2,
+                                    size: isOnTop == true ? 0 : widget.iconWidth / 2,
                                   ),
                                 ),
                               );
