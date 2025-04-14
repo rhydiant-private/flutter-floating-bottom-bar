@@ -1,14 +1,14 @@
-<!-- 
+<!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
 
 For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
 For general information about developing packages, see the Dart guide for
 [creating packages](https://dart.dev/guides/libraries/create-library-packages)
 and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
+[developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
 <h1 align="center">Floating Bottom Bar</h1>
@@ -34,13 +34,13 @@ and the Flutter guide for
   </a>
 </p><br>
 
-| ![A floating tab bar](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/1.gif)  | ![A floating search bar](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/2.gif)  | ![A basic example](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/3.gif)  |
-|---|---|---|
-|  **A floating tab bar** |  **A floating search bar** |  **A basic example** |
+| ![A floating tab bar](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/1.gif) | ![A floating search bar](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/2.gif) | ![A basic example](https://raw.githubusercontent.com/codenameakshay/flutter-floating-bottom-bar/main/screenshots/3.gif) |
+| -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **A floating tab bar**                                                                                                     | **A floating search bar**                                                                                                     | **A basic example**                                                                                                     |
 
-| ![image](https://user-images.githubusercontent.com/60510869/183573165-28e6b896-6559-4d86-897a-3bc8b0adb927.png)|
-| - |
-|  **A floating tab bar with a FAB** |
+| ![image](https://user-images.githubusercontent.com/60510869/183573165-28e6b896-6559-4d86-897a-3bc8b0adb927.png) |
+| --------------------------------------------------------------------------------------------------------------- |
+| **A floating tab bar with a FAB**                                                                               |
 
 ## Features
 
@@ -58,7 +58,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_floating_bottom_bar: ^1.2.0
+  flutter_floating_bottom_bar: ^1.3.0
 ```
 
 ### 2. Install it
@@ -270,15 +270,6 @@ The border radius of the `BottomBar`.
 
 If you don't want the scroll to top button to be visible, set this to `false`.
 
-## alignment (deprecated)
-
-```dart
-     alignment: Alignment.bottomCenter,
-```
-
-The alignment of the Stack in which the `BottomBar` is placed.
-> Note - This property is deprecated. Use `barAlignment` instead.
-
 ## barAlignment
 
 ```dart
@@ -342,6 +333,14 @@ The fit property of the `Stack` in which the `BottomBar` is placed.
 ```
 
 The clipBehaviour property of the `Stack` in which the `BottomBar` is placed.
+
+## respectSafeArea
+
+```dart
+     respectSafeArea: false,
+```
+
+Whether the BottomBar should respect the SafeArea. If set to false, the BottomBar will extend into the system UI areas (like the bottom navigation area on iOS). This gives you more layout flexibility when you need the BottomBar to overlap with system UI elements.
 
 ## barDecoration
 

@@ -162,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           reverse: false,
           hideOnScroll: true,
           scrollOpposite: false,
+          respectSafeArea: true,
           onBottomBarHidden: () {},
           onBottomBarShown: () {},
           body: (context, controller) => TabBarView(
@@ -344,6 +345,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           reverse: false,
           hideOnScroll: true,
           scrollOpposite: false,
+          respectSafeArea: true,
           onBottomBarHidden: () {},
           onBottomBarShown: () {},
           body: (context, controller) => TabBarView(
@@ -420,6 +422,7 @@ class MyHomePage extends StatelessWidget {
           end: 0,
           offset: 10,
           barAlignment: Alignment.bottomCenter,
+          respectSafeArea: true,
           body: (context, controller) => InfiniteListPage(controller: controller, color: Colors.blueAccent),
         ),
       ),
@@ -437,4 +440,51 @@ A simple Material search bar in the top of your app, which hides on scroll down.
           start: 0,
           end: 2,
           bottom: MediaQuery.of(context).size.height,
+```
+
+### Example with respectSafeArea: false
+
+This example shows how to use the BottomBar with `respectSafeArea: false` to allow it to extend into the system UI areas:
+
+```dart
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.black,
+      ),
+      body: BottomBar(
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(Icons.home, color: Colors.white),
+              Icon(Icons.search, color: Colors.white),
+              Icon(Icons.person, color: Colors.white),
+            ],
+          ),
+        ),
+        fit: StackFit.expand,
+        borderRadius: BorderRadius.circular(0),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.decelerate,
+        showIcon: false,
+        width: MediaQuery.of(context).size.width,
+        barColor: Colors.black,
+        start: 2,
+        end: 0,
+        offset: 0,
+        barAlignment: Alignment.bottomCenter,
+        respectSafeArea: false, // This allows the bar to extend into the system UI area
+        body: (context, controller) => InfiniteListPage(controller: controller, color: Colors.blueAccent),
+      ),
+    );
+  }
+}
 ```
