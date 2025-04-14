@@ -90,10 +90,6 @@ class BottomBar extends StatefulWidget {
   final bool showIcon;
 
   ///
-  /// The alignment of the Stack in which the `BottomBar` is placed.
-  final Alignment alignment;
-
-  ///
   /// The alignment of the Bar and the icon in the Stack in which the `BottomBar` is placed.
   final Alignment barAlignment;
 
@@ -145,8 +141,6 @@ class BottomBar extends StatefulWidget {
     this.width = 300,
     this.borderRadius = BorderRadius.zero,
     this.showIcon = true,
-    @Deprecated('Use barAlignment instead, this will be removed in a future release')
-    this.alignment = Alignment.bottomCenter,
     this.barAlignment = Alignment.bottomCenter,
     this.onBottomBarShown,
     this.onBottomBarHidden,
@@ -270,7 +264,7 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Stack(
       fit: widget.fit,
-      alignment: widget.alignment,
+      alignment: widget.barAlignment,
       clipBehavior: widget.clip,
       children: [
         BottomBarScrollControllerProvider(
