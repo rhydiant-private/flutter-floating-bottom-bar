@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class InfiniteListPage extends StatelessWidget {
   final Color color;
   final ScrollController controller;
-  const InfiniteListPage(
-      {required this.color, required this.controller, Key? key})
-      : super(key: key);
+  const InfiniteListPage({required this.color, required this.controller, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

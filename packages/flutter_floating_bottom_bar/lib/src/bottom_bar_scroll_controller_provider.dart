@@ -14,6 +14,6 @@ class BottomBarScrollControllerProvider extends InheritedWidget {
   @override
   bool updateShouldNotify(BottomBarScrollControllerProvider oldWidget) =>
       scrollController != oldWidget.scrollController;
-  static BottomBarScrollControllerProvider of(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<BottomBarScrollControllerProvider>()!;
+  static BottomBarScrollControllerProvider of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<BottomBarScrollControllerProvider>()!;
 }
