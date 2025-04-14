@@ -124,6 +124,11 @@ class BottomBar extends StatefulWidget {
   /// The clipBehaviour property of the `Stack` in which the `BottomBar` is placed.
   final Clip clip;
 
+  ///
+  /// Whether the BottomBar should respect the SafeArea.
+  /// If set to false, the BottomBar will extend into the system UI areas.
+  final bool respectSafeArea;
+
   const BottomBar({
     required this.body,
     required this.child,
@@ -149,6 +154,7 @@ class BottomBar extends StatefulWidget {
     this.hideOnScroll = true,
     this.fit = StackFit.loose,
     this.clip = Clip.hardEdge,
+    this.respectSafeArea = true,
     Key? key,
   }) : super(key: key);
 
@@ -274,101 +280,119 @@ class _BottomBarState extends State<BottomBar> with SingleTickerProviderStateMix
         if (widget.showIcon)
           Align(
             alignment: widget.barAlignment,
-            child: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(widget.offset),
-                child: AnimatedOpacity(
-                  duration: widget.duration,
-                  curve: widget.curve,
-                  opacity: isOnTop == true ? 0 : 1,
-                  child: AnimatedContainer(
-                    duration: widget.duration,
-                    curve: widget.curve,
-                    width: isOnTop == true ? 0 : widget.iconWidth,
-                    height: isOnTop == true ? 0 : widget.iconHeight,
-                    decoration: widget.iconDecoration ??
-                        BoxDecoration(
-                          color: widget.barColor,
-                          shape: BoxShape.circle,
-                        ),
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.zero,
-                    child: ClipOval(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            if (bodyScrollController.hasClients) {
-                              bodyScrollController
-                                  .animateTo(
-                                (!widget.scrollOpposite)
-                                    ? bodyScrollController.position.minScrollExtent
-                                    : bodyScrollController.position.maxScrollExtent,
-                                duration: widget.duration,
-                                curve: widget.curve,
-                              )
-                                  .then((value) {
-                                if (mounted) {
-                                  setState(() {
-                                    isOnTop = true;
-                                    isScrollingDown = false;
-                                  });
-                                }
-                                showBottomBar();
-                              });
-                            }
-                          },
-                          child: () {
-                            if (widget.icon != null) {
-                              return widget.icon!(isOnTop == true ? 0 : widget.iconWidth / 2,
-                                  isOnTop == true ? 0 : widget.iconHeight / 2);
-                            } else {
-                              return Center(
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: null,
-                                  icon: Icon(
-                                    Icons.arrow_upward_rounded,
-                                    color: Colors.white,
-                                    size: isOnTop == true ? 0 : widget.iconWidth / 2,
-                                  ),
-                                ),
-                              );
-                            }
-                          }(),
-                        ),
-                      ),
+            child: widget.respectSafeArea
+                ? SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.all(widget.offset),
+                      child: _buildIcon(),
                     ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(widget.offset),
+                    child: _buildIcon(),
                   ),
-                ),
-              ),
-            ),
           ),
         Align(
           alignment: widget.barAlignment,
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(widget.offset),
-              child: SlideTransition(
-                position: _offsetAnimation,
-                child: Container(
-                  width: widget.width,
-                  decoration: widget.barDecoration ??
-                      BoxDecoration(
-                        color: widget.barColor,
-                        borderRadius: widget.borderRadius,
-                      ),
-                  child: Material(
-                    color: widget.barColor,
-                    child: widget.child,
-                    borderRadius: widget.borderRadius,
+          child: widget.respectSafeArea
+              ? SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.all(widget.offset),
+                    child: _buildBottomBar(),
                   ),
+                )
+              : Padding(
+                  padding: EdgeInsets.all(widget.offset),
+                  child: _buildBottomBar(),
                 ),
-              ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIcon() {
+    return AnimatedOpacity(
+      duration: widget.duration,
+      curve: widget.curve,
+      opacity: isOnTop == true ? 0 : 1,
+      child: AnimatedContainer(
+        duration: widget.duration,
+        curve: widget.curve,
+        width: isOnTop == true ? 0 : widget.iconWidth,
+        height: isOnTop == true ? 0 : widget.iconHeight,
+        decoration: widget.iconDecoration ??
+            BoxDecoration(
+              color: widget.barColor,
+              shape: BoxShape.circle,
+            ),
+        padding: EdgeInsets.zero,
+        margin: EdgeInsets.zero,
+        child: ClipOval(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                if (bodyScrollController.hasClients) {
+                  bodyScrollController
+                      .animateTo(
+                    (!widget.scrollOpposite)
+                        ? bodyScrollController.position.minScrollExtent
+                        : bodyScrollController.position.maxScrollExtent,
+                    duration: widget.duration,
+                    curve: widget.curve,
+                  )
+                      .then((value) {
+                    if (mounted) {
+                      setState(() {
+                        isOnTop = true;
+                        isScrollingDown = false;
+                      });
+                    }
+                    showBottomBar();
+                  });
+                }
+              },
+              child: () {
+                if (widget.icon != null) {
+                  return widget.icon!(
+                      isOnTop == true ? 0 : widget.iconWidth / 2, isOnTop == true ? 0 : widget.iconHeight / 2);
+                } else {
+                  return Center(
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: null,
+                      icon: Icon(
+                        Icons.arrow_upward_rounded,
+                        color: Colors.white,
+                        size: isOnTop == true ? 0 : widget.iconWidth / 2,
+                      ),
+                    ),
+                  );
+                }
+              }(),
             ),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: Container(
+        width: widget.width,
+        decoration: widget.barDecoration ??
+            BoxDecoration(
+              color: widget.barColor,
+              borderRadius: widget.borderRadius,
+            ),
+        child: Material(
+          color: widget.barColor,
+          child: widget.child,
+          borderRadius: widget.borderRadius,
+        ),
+      ),
     );
   }
 }
