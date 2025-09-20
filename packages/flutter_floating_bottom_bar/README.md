@@ -49,6 +49,7 @@ The package allows you to create a floating widget like a bottom navigation bar 
 - It can be used as a tab bar, bottom navigation bar or anything one can think of.
 - It reacts to scrolling events too.
 - It can be used in a full screen app or in a smaller screen.
+- **Context Menu Support**: Add context menus to any tab item with support for both mobile (long-press) and desktop (right-click) gestures.
 
 ## Installing
 
@@ -109,6 +110,73 @@ It needs two required arguments -
 
 - `child` – This is the child inside the `BottomBar` (widget which is floating)
 - `body` – The widget displayed below the `BottomBar` (like your main app)
+
+## Context Menu Support
+
+The package includes a `ContextMenuWrapper` widget that adds context menu functionality to any tab item. This is perfect for adding context menus to the last tab or any specific tab in your floating bottom bar.
+
+### Basic Context Menu Usage
+
+```dart
+ContextMenuWrapper(
+  menuItems: [
+    ContextMenuItem(
+      label: 'Profile',
+      icon: Icons.person,
+      onTap: () {
+        // Handle profile tap
+      },
+    ),
+    ContextMenuItem(
+      label: 'Settings',
+      icon: Icons.settings,
+      onTap: () {
+        // Handle settings tap
+      },
+    ),
+  ],
+  child: Icon(Icons.settings), // Your tab content
+)
+```
+
+### Features of ContextMenuWrapper
+
+- **Multi-platform support**: Long-press on mobile, right-click on desktop/web
+- **Configurable menu items**: Each item can have a label, icon, and callback
+- **Smart positioning**: Context menu automatically positions itself near the tap location
+- **Easy integration**: Simply wrap any widget to add context menu functionality
+
+### Complete Example with Tab Bar
+
+```dart
+tabs: [
+  // Regular tabs...
+  Tab(icon: Icon(Icons.home)),
+  Tab(icon: Icon(Icons.search)),
+  
+  // Last tab with context menu
+  ContextMenuWrapper(
+    menuItems: [
+      ContextMenuItem(
+        label: 'Profile',
+        icon: Icons.person,
+        onTap: () => Navigator.pushNamed(context, '/profile'),
+      ),
+      ContextMenuItem(
+        label: 'Settings',
+        icon: Icons.settings,
+        onTap: () => Navigator.pushNamed(context, '/settings'),
+      ),
+      ContextMenuItem(
+        label: 'Help',
+        icon: Icons.help,
+        onTap: () => showHelpDialog(context),
+      ),
+    ],
+    child: Tab(icon: Icon(Icons.more_vert)),
+  ),
+]
+```
 
 # Detailed Usage
 

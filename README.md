@@ -49,6 +49,7 @@ The package allows you to create a floating widget like a bottom navigation bar 
 - It can be used as a tab bar, bottom navigation bar or anything one can think of.
 - It reacts to scrolling events too.
 - It can be used in a full screen app or in a smaller screen.
+- **Context Menu Support**: Add context menus to any tab item with support for both mobile (long-press) and desktop (right-click) gestures.
 
 ## Installing
 
