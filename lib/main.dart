@@ -135,13 +135,53 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 55,
-                  width: 40,
-                  child: Center(
-                    child: Icon(
-                      Icons.settings,
-                      color: currentPage == 4 ? colors[4] : unselectedColor,
+                ContextMenuWrapper(
+                  menuItems: [
+                    ContextMenuItem(
+                      label: 'Profile',
+                      icon: Icons.person,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profile selected')),
+                        );
+                      },
+                    ),
+                    ContextMenuItem(
+                      label: 'Settings',
+                      icon: Icons.settings,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Settings selected')),
+                        );
+                      },
+                    ),
+                    ContextMenuItem(
+                      label: 'Help',
+                      icon: Icons.help,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Help selected')),
+                        );
+                      },
+                    ),
+                    ContextMenuItem(
+                      label: 'About',
+                      icon: Icons.info,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('About selected')),
+                        );
+                      },
+                    ),
+                  ],
+                  child: SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.settings,
+                        color: currentPage == 4 ? colors[4] : unselectedColor,
+                      ),
                     ),
                   ),
                 ),
