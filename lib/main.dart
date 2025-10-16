@@ -135,13 +135,44 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 55,
-                  width: 40,
-                  child: Center(
-                    child: Icon(
-                      Icons.settings,
-                      color: currentPage == 4 ? colors[4] : unselectedColor,
+                TabWithContextMenu(
+                  menuItems: [
+                    ContextMenuItem(
+                      label: 'Open Settings',
+                      icon: Icons.open_in_new,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Open Settings selected')),
+                        );
+                      },
+                    ),
+                    ContextMenuItem(
+                      label: 'Clear Cache',
+                      icon: Icons.clear_all,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Clear Cache selected')),
+                        );
+                      },
+                    ),
+                    ContextMenuItem(
+                      label: 'About',
+                      icon: Icons.info_outline,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('About selected')),
+                        );
+                      },
+                    ),
+                  ],
+                  child: SizedBox(
+                    height: 55,
+                    width: 40,
+                    child: Center(
+                      child: Icon(
+                        Icons.settings,
+                        color: currentPage == 4 ? colors[4] : unselectedColor,
+                      ),
                     ),
                   ),
                 ),

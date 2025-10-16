@@ -49,6 +49,7 @@ The package allows you to create a floating widget like a bottom navigation bar 
 - It can be used as a tab bar, bottom navigation bar or anything one can think of.
 - It reacts to scrolling events too.
 - It can be used in a full screen app or in a smaller screen.
+- Supports context menus on tab items (e.g., long-press or right-click to show options).
 
 ## Installing
 
@@ -363,6 +364,56 @@ The BoxDecoration for the `BottomBar`.
 ```
 
 The BoxDecoration for the scroll to top icon shown when `BottomBar` is hidden.
+
+## Context Menu Support
+
+You can add context menus to any tab item (especially useful for the last tab) using the `TabWithContextMenu` widget. The context menu will appear on long-press (mobile) or right-click (desktop/web).
+
+```dart
+    TabBar(
+      tabs: [
+        Tab(icon: Icon(Icons.home)),
+        Tab(icon: Icon(Icons.search)),
+        // Wrap the last tab with TabWithContextMenu
+        TabWithContextMenu(
+          menuItems: [
+            ContextMenuItem(
+              label: 'Open Settings',
+              icon: Icons.open_in_new,
+              onTap: () {
+                // Handle menu item tap
+                print('Open Settings selected');
+              },
+            ),
+            ContextMenuItem(
+              label: 'Clear Cache',
+              icon: Icons.clear_all,
+              onTap: () {
+                print('Clear Cache selected');
+              },
+            ),
+            ContextMenuItem(
+              label: 'About',
+              icon: Icons.info_outline,
+              onTap: () {
+                print('About selected');
+              },
+            ),
+          ],
+          child: Tab(icon: Icon(Icons.settings)),
+        ),
+      ],
+    )
+```
+
+### ContextMenuItem
+
+Each menu item requires:
+- `label` (String) - The text displayed in the menu
+- `onTap` (VoidCallback) - The function to execute when tapped
+- `icon` (IconData, optional) - An optional icon to display alongside the label
+
+The context menu automatically positions itself near the tap location and provides native platform behavior for both mobile and desktop environments.
 
 > Note - You can find more detailed examples in the `example` directory.
 
