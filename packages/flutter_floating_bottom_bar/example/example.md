@@ -488,3 +488,133 @@ class MyHomePage extends StatelessWidget {
   }
 }
 ```
+
+### Example with Context Menu on Last Tab
+
+This example demonstrates how to add a context menu to the last tab item. The context menu will appear on long-press (mobile) or right-click (desktop/web):
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+
+class MyHomePageWithContextMenu extends StatefulWidget {
+  MyHomePageWithContextMenu({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageWithContextMenuState createState() => _MyHomePageWithContextMenuState();
+}
+
+class _MyHomePageWithContextMenuState extends State<MyHomePageWithContextMenu> 
+    with SingleTickerProviderStateMixin {
+  late int currentPage;
+  late TabController tabController;
+  final List<Color> colors = [Colors.yellow, Colors.red, Colors.green, Colors.blue, Colors.pink];
+
+  @override
+  void initState() {
+    currentPage = 0;
+    tabController = TabController(length: 5, vsync: this);
+    tabController.animation?.addListener(() {
+      final value = tabController.animation!.value.round();
+      if (value != currentPage && mounted) {
+        setState(() => currentPage = value);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Color unselectedColor = colors[currentPage].computeLuminance() < 0.5 
+        ? Colors.black 
+        : Colors.white;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title)),
+      body: BottomBar(
+        child: TabBar(
+          controller: tabController,
+          tabs: [
+            Tab(icon: Icon(Icons.home)),
+            Tab(icon: Icon(Icons.search)),
+            Tab(icon: Icon(Icons.add)),
+            Tab(icon: Icon(Icons.favorite)),
+            // Wrap the last tab with TabWithContextMenu
+            TabWithContextMenu(
+              menuItems: [
+                ContextMenuItem(
+                  label: 'Open Settings',
+                  icon: Icons.open_in_new,
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Open Settings selected')),
+                    );
+                  },
+                ),
+                ContextMenuItem(
+                  label: 'Clear Cache',
+                  icon: Icons.clear_all,
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Clear Cache selected')),
+                    );
+                  },
+                ),
+                ContextMenuItem(
+                  label: 'About',
+                  icon: Icons.info_outline,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('About'),
+                        content: Text('Flutter Floating Bottom Bar v1.3.0'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+              child: Tab(icon: Icon(Icons.settings)),
+            ),
+          ],
+        ),
+        width: MediaQuery.of(context).size.width * 0.8,
+        borderRadius: BorderRadius.circular(500),
+        barColor: colors[currentPage],
+        body: (context, controller) => TabBarView(
+          controller: tabController,
+          children: colors.map((e) => Container(color: e)).toList(),
+        ),
+      ),
+    );
+  }
+}
+```
+
+**Context Menu Features:**
+- **Long-press** (mobile): Tap and hold on the last tab to open the menu
+- **Right-click** (desktop/web): Right-click on the last tab to open the menu
+- **Customizable items**: Each menu item can have a label, icon, and callback
+- **Native appearance**: Uses Flutter's built-in `showMenu` for platform-appropriate styling
+- **Non-blocking**: Tab navigation still works normally; the context menu is an additional feature
+
+**Key Points:**
+- Wrap only the tab(s) where you want context menu support with `TabWithContextMenu`
+- The context menu doesn't interfere with normal tab switching
+- Menu items support optional icons for better visual clarity
+- The menu automatically positions itself near the tap/click location
+

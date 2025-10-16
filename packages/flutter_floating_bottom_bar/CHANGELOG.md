@@ -1,3 +1,11 @@
+## 1.3.1 (Unreleased)
+
+- Added `TabWithContextMenu` widget for adding context menus to tab items
+- Added `ContextMenuItem` class for defining context menu items with label, icon, and callback
+- Context menus support both long-press (mobile) and right-click (desktop/web) interactions
+- Added comprehensive documentation and examples for context menu feature
+- Added unit and widget tests for context menu functionality
+
 ## 1.3.0
 
 - Added `respectSafeArea` property to control whether the BottomBar should respect the SafeArea
